@@ -96,8 +96,8 @@ use the training median for that feature, as they do on the web server and in me
 ## Models
 
 `MERGE_score` and `MERGE_alphagenome_average` come from the released MERGE models
-(MERGE-benchmark `05_results/trained_models/`, identical to those in merge-cli
-3.18.0): MERGE-Coding (beam search, L2 logistic regression, 6 features) and
+(MERGE-benchmark `05_results/trained_models/`, identical to those bundled with
+merge-cli): MERGE-Coding (beam search, L2 logistic regression, 6 features) and
 MERGE-Splice (LASSO, CatBoost, 12 features). Neither model uses an
 AlphaGenome feature. Each file can be re-scored exactly from its feature columns with
 those models.
