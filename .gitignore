@@ -1,0 +1,2 @@
+# The score files are release assets, too large for the repository
+*.csv.gz

@@ -1,0 +1,17 @@
+MERGE precomputed scores — licence
+==================================
+
+The precomputed score files distributed with this repository
+(coding_precompute_MERGE_scored.csv.gz and splicing_precompute_MERGE_scored.csv.gz,
+attached to its releases), MD5SUMS.txt and README.md are licensed under the Creative
+Commons Attribution-NonCommercial 4.0 International licence (CC BY-NC 4.0):
+https://creativecommons.org/licenses/by-nc/4.0/
+
+Copyright (c) 2026 The MERGE benchmark authors
+
+The files contain outputs of upstream resources that keep their own terms: AlphaGenome
+(API offered for non-commercial use), dbNSFP (academic licence; AlphaMissense and ESM-1b
+columns) and Nucleotide Transformer (CC BY-NC-SA 4.0). Users are responsible for
+complying with each provider's terms.
+
+Research use only. Not a medical device and not for clinical decisions.
