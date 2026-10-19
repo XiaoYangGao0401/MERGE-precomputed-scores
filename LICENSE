@@ -1,11 +1,13 @@
 MERGE precomputed scores — licence
 ==================================
 
-The precomputed score files distributed with this repository
-(coding_precompute_MERGE_scored.csv.gz and splicing_precompute_MERGE_scored.csv.gz,
-attached to its releases), MD5SUMS.txt and README.md are licensed under the Creative
-Commons Attribution-NonCommercial 4.0 International licence (CC BY-NC 4.0):
-https://creativecommons.org/licenses/by-nc/4.0/
+The precomputed score files distributed with this repository (the hg38 and hg19
+.csv.gz files and hg19_liftover_excluded.tsv, attached to its releases), MD5SUMS.txt and
+README.md are licensed under the Creative Commons Attribution-NonCommercial 4.0
+International licence (CC BY-NC 4.0): https://creativecommons.org/licenses/by-nc/4.0/
+
+make_hg19.py is released under the MIT licence, as is the code of MERGE-benchmark
+(https://github.com/TheFangLab/MERGE-benchmark/blob/main/LICENSE).
 
 Copyright (c) 2026 The MERGE benchmark authors
 

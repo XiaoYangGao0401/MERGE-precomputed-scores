@@ -1,4 +1,4 @@
-# MERGE precomputed scores (hg38)
+# MERGE precomputed scores (hg38 and hg19)
 
 Precomputed MERGE scores and the underlying model-derived features for two candidate
 sets of single-nucleotide variants (SNVs), from *Benchmarking genomic foundation and
@@ -6,25 +6,31 @@ sequence-to-function models for variant pathogenicity prediction* (Chen and Fang
 
 | File | Variants | Content |
 |---|---:|---|
-| `coding_precompute_MERGE_scored.csv.gz` | 107,922 | coding SNVs: MERGE-Coding score and features |
-| `splicing_precompute_MERGE_scored.csv.gz` | 1,920,006 | splice-region SNVs: MERGE-Splice score, the MERGE + AlphaGenome average and features |
+| `coding_precompute_MERGE_scored.csv.gz` | 107,922 | coding SNVs (hg38): MERGE-Coding score and features |
+| `splicing_precompute_MERGE_scored.csv.gz` | 1,920,006 | splice-region SNVs (hg38): MERGE-Splice score, the MERGE + AlphaGenome average and features |
+| `coding_precompute_MERGE_scored_hg19.csv.gz` | 107,844 | the coding file with hg19 coordinates |
+| `splicing_precompute_MERGE_scored_hg19.csv.gz` | 1,916,430 | the splice-region file with hg19 coordinates |
+| `hg19_liftover_excluded.tsv` | 3,654 | variants left out of the hg19 files, with the reason |
 | `MD5SUMS.txt` | | checksums |
 
 ## Download
 
-The two `.csv.gz` files are larger than GitHub allows in a repository (100 MB), so they
-are attached to the release
+The data files are larger than GitHub allows in a repository (100 MB), so they are
+attached to the release
 [`v1.0`](https://github.com/XiaoYangGao0401/MERGE-precomputed-scores/releases/tag/v1.0)
-of [XiaoYangGao0401/MERGE-precomputed-scores](https://github.com/XiaoYangGao0401/MERGE-precomputed-scores).
-That repository and `09_precomputed_scores/` of
-[MERGE-benchmark](https://github.com/TheFangLab/MERGE-benchmark) keep this README and the
-checksums.
+of [XiaoYangGao0401/MERGE-precomputed-scores](https://github.com/XiaoYangGao0401/MERGE-precomputed-scores);
+the repository keeps this README, the checksums and the script that made the hg19 files.
+The analysis code and models are in
+[MERGE-benchmark](https://github.com/TheFangLab/MERGE-benchmark).
 
 ```bash
 B=https://github.com/XiaoYangGao0401/MERGE-precomputed-scores/releases/download/v1.0
-curl -LO $B/coding_precompute_MERGE_scored.csv.gz      # 21 MB
-curl -LO $B/splicing_precompute_MERGE_scored.csv.gz    # 274 MB
-md5sum -c MD5SUMS.txt
+curl -LO $B/MD5SUMS.txt
+curl -LO $B/coding_precompute_MERGE_scored.csv.gz          # hg38, 21 MB
+curl -LO $B/splicing_precompute_MERGE_scored.csv.gz        # hg38, 274 MB
+curl -LO $B/coding_precompute_MERGE_scored_hg19.csv.gz     # hg19, 21 MB
+curl -LO $B/splicing_precompute_MERGE_scored_hg19.csv.gz   # hg19, 283 MB
+md5sum -c --ignore-missing MD5SUMS.txt
 ```
 
 ## Candidate sets
@@ -38,14 +44,38 @@ md5sum -c MD5SUMS.txt
   variants; it is not a catalogue of rare or clinically relevant variation. Other
   variants can be scored with the web server or merge-cli.
 
-Coordinates are hg38, one-based, VCF-style; `chr` carries the `chr` prefix. For hg19, use
-UCSC liftOver with the hg38-to-hg19 chain.
+Coordinates are one-based and VCF-style; `chr` carries the `chr` prefix. The variants
+were defined and scored on hg38.
+
+## hg19 files
+
+The `_hg19` files contain the same rows with hg19 (GRCh37) coordinates, made by
+`make_hg19.py` in this repository. Each hg38 position was lifted with the UCSC
+`hg38ToHg19.over.chain.gz` chain (pyliftover 0.4.1). A variant was kept only if it mapped to
+exactly one position on chr1–22, X or Y and the base of the UCSC `hg19.2bit` reference at
+that position equalled its REF allele; when the chain maps a position to the minus strand
+(584 coding and 8,334 splice-region variants), REF and ALT were complemented before the
+check. Variants that two different hg38 variants lift onto were dropped as well.
+
+| | hg38 | hg19 | Unmapped | Several positions or other contig | hg19 base differs from REF | Shared hg19 variant |
+|---|---:|---:|---:|---:|---:|---:|
+| Coding | 107,922 | 107,844 | 25 | 0 | 35 | 18 |
+| Splice region | 1,920,006 | 1,916,430 | 2,424 | 75 | 93 | 984 |
+
+`hg19_liftover_excluded.tsv` lists every excluded variant with its reason. In the hg19 files
+`chr`, `pos`, `ref` and `alt` are hg19, followed by the original `chr_hg38`, `pos_hg38`,
+`ref_hg38` and `alt_hg38`; every other column is copied verbatim from the hg38 file. The
+scores were computed on hg38 sequences: only the coordinates change. As a check, the
+1,577 BRCA1 saturation genome editing variants of the MERGE-benchmark external validation,
+lifted the same way from hg38, reproduce the hg19 coordinates and alleles published by
+Findlay et al. (2018) for all 1,577.
 
 ## Columns
 
 | Column | Description |
 |---|---|
-| `chr`, `pos`, `ref`, `alt` | variant (hg38) |
+| `chr`, `pos`, `ref`, `alt` | variant (hg38; hg19 in the `_hg19` files) |
+| `chr_hg38`, `pos_hg38`, `ref_hg38`, `alt_hg38` (`_hg19` files) | the variant's hg38 coordinates and alleles |
 | `evo2_7b_score`, `evo2_7b_base_score`, `evo2_1b_base_score` | Evo 2: mean log-likelihood(REF) − mean log-likelihood(ALT), 8,192-bp window |
 | `carbon_score` | Carbon-3B: summed log-likelihood(REF) − summed log-likelihood(ALT), 24,576-bp window |
 | `generator_score`, `generator_v2_score` | GENERATOR / GENERATOR-v2: mean NLL(ALT) − mean NLL(REF), 600 bp |

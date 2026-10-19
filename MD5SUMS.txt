@@ -1,2 +1,5 @@
 233fa7c218ac8fa602b489876c88676a  coding_precompute_MERGE_scored.csv.gz
+3ab1d591c3540decacbe5583b1473253  coding_precompute_MERGE_scored_hg19.csv.gz
 a9526adadbd7275bd45f1bcaaab5a279  splicing_precompute_MERGE_scored.csv.gz
+01d4fe8e05b473cb96d51104356fd76a  splicing_precompute_MERGE_scored_hg19.csv.gz
+96e062d53c722d4c32b54d8a7cfe9bc0  hg19_liftover_excluded.tsv
